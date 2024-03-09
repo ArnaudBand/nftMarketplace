@@ -145,4 +145,28 @@ contract NFTMarketPlace is ERC721URIStorage {
     }
     return items;
   }
+
+  function fetchMyNft () public view returns(MarketItem[] memory) {
+    uint256 itemCount = _tokenIds.current();
+    uint256 myNftCount = 0;
+    uint256 currentIndex = 0;
+
+    for (uint i = 0; i < itemCount; i++) {
+      if (idMarketItem[i + 1].owner == msg.sender) {
+        myNftCount += 1;
+      }
+    }
+
+    MarketItem[] memory items = new MarketItem[](myNftCount);
+
+    for (uint i = 0; i < itemCount; i++) {
+      if (idMarketItem[i + 1].owner == msg.sender) {
+        uint256 currentId = i + 1;
+        MarketItem storage currentItem = idMarketItem[currentId];
+        items[currentIndex] = currentItem;
+        currentIndex += 1;
+      }
+    }
+    return items;
+  }
 }
